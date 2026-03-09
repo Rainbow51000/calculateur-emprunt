@@ -48,30 +48,12 @@
         Lancer la simulation
     </button>
 
-    <table id="table">
-        <thead>
-            <tr>
-                <th>Années</th>
-                <th>Capital restant du en début de période</th>
-                <th>Intérêts</th>
-                <th>Amortissements</th>
-                <th>Annuités</th>
-                <th>Capital restant du en fin de période</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th>1</th>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
-            </tr>
-        </tbody>
-    </table>
+    <div id="tableSection">
+
+    </div>
 
     <script>
+      const tableSection = document.getElementById("tableSection");
       const startButton = document.getElementById("startButton");
         startButton.addEventListener("click", () => {
           // Fonction qui se lance quand l'utilisateur appuie sur le bouton
@@ -85,13 +67,36 @@
 
           console.log(tauxEmprunt, tauxAnnuel, duration, periodiciteRemboursement, amortissementType);
 
-          var d = document.createElement("div").innerHTML = "test"
+
+          var table = document.createElement("table");
+
+          table.innerHTML = `<thead>
+            <tr>
+                <th>Années</th>
+                <th>Capital restant du en début de période</th>
+                <th>Intérêts</th>
+                <th>Amortissements</th>
+                <th>Annuités</th>
+                <th>Capital restant du en fin de période</th>
+            </tr>
+        </thead>`;
+
+          table.innerHTML += `<tbody>
+            <tr>
+                <th>1</th>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+            </tr>
+        </tbody>`;
 
           // for (let year = 0; year < duration; year++) {
           //
           // }
 
-          document.body.append(d);
+          document.body.append(table);
         });
     </script>
 </body>
