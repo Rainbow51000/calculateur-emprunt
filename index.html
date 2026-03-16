@@ -3,27 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div>
         <label for="montantEmprunt">
             Montant Emprunt
         </label>
-        <input name="montantEmprunt" id="montantEmprunt" />
+        <input name="montantEmprunt" id="montantEmprunt">
     </div>
+
     <div>
         <label for="tauxInteret">
             Taux d'Intérêts
         </label>
-        <input name="tauxInteret" id="tauxInteret" />
+        <input name="tauxInteret" id="tauxInteret">
     </div>
+
     <div>
         <label for="duration">
             Durée (en années)
         </label>
-        <input name="duration" id="duration" />
+        <input name="duration" id="duration">
     </div>
+
     <div>
         <label for="periodiciteRemboursement">
             Périodicité des remboursements
@@ -35,13 +38,12 @@
             <option value="annuite">Annuités</option>
         </select>
     </div>
+
     <button id="startButton">
         Lancer la simulation
     </button>
 
-    <div id="tableSection">
-
-    </div>
+    <div id="tableSection"></div>
 
     <script src="scriptTableau.js"></script>
 </body>
