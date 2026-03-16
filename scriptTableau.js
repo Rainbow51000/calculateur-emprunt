@@ -102,5 +102,6 @@ startButton.addEventListener("click", () => {
       </tr>
     </tbody>`;
 
-  document.body.append(table);
+  // document.body.append(table);
+  tableSection.replaceChildren(table);
 });
