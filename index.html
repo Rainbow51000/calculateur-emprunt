@@ -7,16 +7,16 @@
 </head>
 <body>
     <div>
-        <label for="tauxEmprunt">
-            Montant Taux Emprunt
+        <label for="montantEmprunt">
+            Montant Emprunt
         </label>
-        <input name="tauxEmprunt" id="tauxEmprunt" />
+        <input name="montantEmprunt" id="montantEmprunt" />
     </div>
     <div>
-        <label for="tauxAnnuel">
-            Taux Annuel
+        <label for="tauxInteret">
+            Taux d'Intérêts
         </label>
-        <input name="tauxAnnuel" id="tauxAnnuel" />
+        <input name="tauxInteret" id="tauxInteret" />
     </div>
     <div>
         <label for="duration">
@@ -35,15 +35,6 @@
             <option value="annuite">Annuités</option>
         </select>
     </div>
-    <div>
-        <label for="amortissementType">
-            Type d'amortissement
-        </label>
-        <select name="amortissementType" id="amortissementType">
-            <option value="annuite">Annuités constantes</option>
-            <option value="amortissemment">Amortissements constants</option>
-        </select>
-    </div>
     <button id="startButton">
         Lancer la simulation
     </button>
@@ -53,49 +44,89 @@
     </div>
 
     <script>
+      function roundTwoDigit(number) {
+        return Number(number).toFixed(2);
+      }
+
       const tableSection = document.getElementById("tableSection");
       const startButton = document.getElementById("startButton");
         startButton.addEventListener("click", () => {
           // Fonction qui se lance quand l'utilisateur appuie sur le bouton
           // Lancement de la simulation
 
-          const tauxEmprunt = document.getElementById("tauxEmprunt").value;
-          const tauxAnnuel = document.getElementById("tauxAnnuel").value;
-          const duration = document.getElementById("duration").value;
+          const montantEmprunt = document.getElementById("montantEmprunt").value;
+          let tauxInteret = document.getElementById("tauxInteret").value / 100 + 1;
+          let duration = document.getElementById("duration").value;
           const periodiciteRemboursement = document.getElementById("periodiciteRemboursement").value;
-          const amortissementType = document.getElementById("amortissementType").value;
 
-          console.log(tauxEmprunt, tauxAnnuel, duration, periodiciteRemboursement, amortissementType);
+          let table = document.createElement("table");
+
+          // setup périodicité (année, mois...)
+          const periodiciteMap = {
+            annuite: 'Années',
+            trimestre: 'Trimestres',
+            mensuel: 'Mois',
+            semestre: 'Semestres'
+          };
+          const typeDelta = periodiciteMap[periodiciteRemboursement];
+          let dividerDelta = 1;
 
 
-          var table = document.createElement("table");
+          switch (typeDelta) {
+            case 'Trimestres':
+              duration = duration * 3;
+              dividerDelta = 4;
+              break;
+            case 'Mois':
+              duration = duration * 12;
+              dividerDelta = 12;
+              break;
+            case 'Semestres':
+              duration = duration * 2;
+              dividerDelta = 2;
+              break;
+          }
 
+          tauxInteret = tauxInteret**(1/dividerDelta) - 1;
+          console.log(tauxInteret)
+
+          // mise en place tableau
           table.innerHTML = `<thead>
             <tr>
-                <th>Années</th>
+                <th>${typeDelta}</th>
                 <th>Capital restant du en début de période</th>
                 <th>Intérêts</th>
                 <th>Amortissements</th>
-                <th>Annuités</th>
+                <th>${periodiciteRemboursement}</th>
                 <th>Capital restant du en fin de période</th>
             </tr>
         </thead>`;
 
+        let capitalFin = montantEmprunt;
+        const annuiteEmprunt = roundTwoDigit(montantEmprunt * (tauxInteret / (1 - (1 + tauxInteret)**(-duration))));
+        for (let delta = 1; delta <= duration; delta++) {
+          // un seul cycle, effectuée à chaque tour
+          let capitalDeb = roundTwoDigit(capitalFin);
+          let interetPeriode = roundTwoDigit(capitalDeb * tauxInteret);
+          let amortissementCapital = roundTwoDigit(annuiteEmprunt - interetPeriode);
+          capitalFin = roundTwoDigit(capitalDeb - amortissementCapital);
+
+          if (delta == duration) {
+            capitalFin = 0;
+          }
+
+          // ajout 1 seule ligne
           table.innerHTML += `<tbody>
-            <tr>
-                <th>1</th>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
-            </tr>
-        </tbody>`;
-
-          // for (let year = 0; year < duration; year++) {
-          //
-          // }
-
+                <tr>
+                    <th>${delta}</th>
+                    <td>${capitalDeb}</td>
+                    <td>${interetPeriode}</td>
+                    <td>${amortissementCapital}</td>
+                    <td>${annuiteEmprunt}</td>
+                    <td>${capitalFin}</td>
+                </tr>
+            </tbody>`;
+          }
           document.body.append(table);
         });
     </script>
