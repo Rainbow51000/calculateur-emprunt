@@ -104,6 +104,7 @@
 
         let capitalFin = montantEmprunt;
         const annuiteEmprunt = roundTwoDigit(montantEmprunt * (tauxInteret / (1 - (1 + tauxInteret)**(-duration))));
+        let sumInteret = 0;
         for (let delta = 1; delta <= duration; delta++) {
           // un seul cycle, effectuée à chaque tour
           let capitalDeb = roundTwoDigit(capitalFin);
@@ -114,6 +115,8 @@
           if (delta == duration) {
             capitalFin = 0;
           }
+
+          sumInteret += parseFloat(interetPeriode);
 
           // ajout 1 seule ligne
           table.innerHTML += `<tbody>
@@ -127,6 +130,19 @@
                 </tr>
             </tbody>`;
           }
+
+          // affichage ligne total
+          table.innerHTML += `<tbody>
+                <tr>
+                    <th>Total</th>
+                    <td>-</td>
+                    <td>${roundTwoDigit(sumInteret)}</td>
+                    <td>${montantEmprunt}</td>
+                    <td>${annuiteEmprunt*duration}</td>
+                    <td>-</td>
+                </tr>
+            </tbody>`;
+
           document.body.append(table);
         });
     </script>
